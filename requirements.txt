@@ -5,6 +5,4 @@ docutils==0.16
 numpy==1.19.1
 Pygments==2.7.2
 pylint==2.6.0
-pypiwin32==223
-pywin32==228
 
