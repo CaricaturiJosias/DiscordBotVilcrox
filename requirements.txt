@@ -24,7 +24,6 @@ pylint==2.6.0
 pyparsing==2.4.7
 pypiwin32==223
 python-dateutil==2.8.1
-python-dotenv==0.15.0
 pywin32==228
 requests==2.25.1
 six==1.15.0
