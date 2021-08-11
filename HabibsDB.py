@@ -1,3 +1,4 @@
+#This is a py code trying to integrate Habib's manager with a postgreSQL server
 import psycopg2
 def inicio(con):
     cur = con.cursor()

@@ -1,3 +1,4 @@
+#This is a discord bot made to annoy a friend, please be gentle 
 import discord, os, discord.utils, time, psycopg2, string
 from HabibsDB import conexao, inicio
 from dotenv import load_dotenv
