@@ -1,12 +1,19 @@
 #This is a discord bot made to annoy a friend, please be gentle 
-import discord, os, discord.utils, time, psycopg2, string
-from HabibsDB import conexao, inicio
+from asyncio.windows_events import NULL
+from logging import NullHandler
+import discord, os, discord.utils, time, _thread as thread
+import HabibsDB as HDB
 from dotenv import load_dotenv
 from discord.ext import commands
 from discord import FFmpegPCMAudio
 load_dotenv()
+bot = commands.Bot(command_prefix = "h ", owner_id = 183653926598475776)
 
-bot = commands.Bot(command_prefix = "h ")
+DB = HDB.Database()
+@bot.before_invoke
+async def common(message):
+       DB.user_check(str(message.author.id), message.author.display_name)
+
 MensagemProibida = ["lepo","lepo lepo", "kid abelha", "coringatron"]
 habibsalvos= [206225035332026368, 338052801286635520, 183653926598475776, 266301388059967489, 266301388059967489]
 @bot.event
@@ -47,12 +54,12 @@ async def urbs(message):
         await message.channel.send(f'Você não tem permissão para usar esse comando <@{message.author.id}>, bata no vitor se concorda/discorda disso')
 
 @bot.command(pass_context = True)
-@commands.has_any_role(437122446890631168, 437122570563878915, 804899470864023572, 731743081812066334, 447916692912472064, 736291367302594704, 663501855657164814, 374020042360094730)
 async def mov(ctx, arg):
     try:
         canal_antes = ctx.message.author.voice.channel
         guild = ctx.guild
-        channel = guild.get_channel(206234863747989505)
+        channel = guild.get_channel(guild.afk_channel.id)
+        print(str(channel))
         idVitima = (((arg.split('!'))[1]).split('>'))[0]
         vitima = await guild.fetch_member(int(idVitima))
         await vitima.move_to(channel)
@@ -62,570 +69,75 @@ async def mov(ctx, arg):
         print(f"Não foi possível mover o usuario {vitima.name}")
 
 @mov.error
-async def bemtevi(ctx, error):
+async def mov(ctx):
     await ctx.channel.send(f"Você não possui a permissão necessária para fazer isso, bata no <@{206225035332026368}>"+
-                            " para tentar conseguir a permissão")
+                            " para tentar conseguir a permissão (Drop raro [0.005% de não conseguir])")
 
-@bot.command(pass_context = True)
-async def vitor(ctx):
-    try:
-        canal_antes = ctx.message.author.voice.channel
-        guild = ctx.guild
-        channel = guild.get_channel(206234863747989505)
-        vitima = await guild.fetch_member(206225035332026368)
-        await vitima.move_to(channel)
-        time.sleep(2)
-        await vitima.move_to(canal_antes)
-    except:
-        print("Não foi possível mover o vitor")
+#####
+@bot.command(name="m")
+async def m(ctx, *arg):
+    duracao = NULL 
+    repeticao = 1
+    for text in arg:
+        resultado = DB.Comando(text)
+        if resultado != 0:
+            comando = text
+            duracao = resultado
 
-@bot.command(pass_context = True)
-async def renan(ctx):
-    canal_antes = ctx.message.author.voice.channel
-    guild = ctx.guild
-    channel = guild.get_channel(206234863747989505)
-    vitima = await guild.fetch_member(206225185605419008)
-    await vitima.move_to(channel)
-    time.sleep(2)
-    await vitima.move_to(canal_antes)
+        if text.isnumeric():
+            repeticao = int(text)
+    if duracao != NULL:
+        await Play(ctx, comando, duracao, repeticao)
 
-@bot.command(name="mama")
-async def mama(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
+async def Play(ctx, comando, duracao, repeticao):
+    channel = ctx.author.voice.channel
+    if channel != type(None):
+
         try: 
-            channel = await vc.connect()
+            vc = await channel.connect()
         except:
-            await sair(vc.connect())
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\mama.mp3"))
-            time.sleep(3.2)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
+            sair(channel)
 
-
-@bot.command(name="oof")
-async def oof(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            await sair(vc.connect())
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\oof.mp3"))
-            time.sleep(0.5)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
-
-@bot.command(name="bemtevi")
-async def bemtevi(ctx, arg):
-    #try:
-        #conexao(con, ctx.author.name, ctx.author.id)
-    #except:
-    #    print("Conexão não foi possível")
-    vc = ctx.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            sair(vc)
         else:
             try:
                 i = 0
-                while i<int(arg):
-                    channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\bemtevi.mp3"))
-                    time.sleep(1.45)
+                while i < repeticao:
+                    vc.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source=f'D:\\Audio_Bot\\{comando}.mp3'))
+                    time.sleep(duracao)
                     i += 1
-                await sair(channel)
+                await sair(vc)
             except:
-                print("Não conseguiu cantar")
-            await sair(channel)
-    else:
-        await ctx.channel.send("Você não está em um canal de voz")
+                print("lmao")
+#####
 
-@bemtevi.error
-async def bemtevi(ctx, error):
-    if isinstance(error,commands.MissingRequiredArgument):
-        try: 
-            vc = ctx.author.voice.channel
-            channel = await vc.connect()
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\bemtevi.mp3"))
-            time.sleep(1.3)
-            await sair(channel)
-        except:
-            sair(vc)
+####
 
-@bot.command(name="sokser")
-async def sokser(ctx, arg):
-    vc = ctx.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            sair(vc)
-        else:
-            try:
-                i = 0
-                while i<int(arg):
-                    channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\sokser.mp3"))
-                    time.sleep(2.5)
-                    i += 1
-                await sair(channel)
-            except:
-                print("Não conseguiu cantar")
-            await sair(channel)
-    else:
-        await ctx.channel.send("Você não está em um canal de voz")
-
-@sokser.error
-async def sokser(ctx, error):
-    if isinstance(error,commands.MissingRequiredArgument):
-        try: 
-            vc = ctx.author.voice.channel
-            channel = await vc.connect()
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\sokser.mp3"))
-            time.sleep(2.5)
-            await sair(channel)
-        except:
-            sair(vc)
-
-@bot.command(name="socser")
-async def socser(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            await sair(vc.connect())
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\socser.mp3"))
-            time.sleep(15)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
-
-@bot.command(name="max")
-async def max(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            await sair(vc.connect())
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\max.mp3"))
-            time.sleep(28)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
-
-@bot.command(name="coringa")
-async def coringa(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            await sair(vc.connect())
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\coringa.mp3"))
-            time.sleep(15)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
-
-@bot.command(name="jogos")
-async def jogos(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            await sair(vc.connect())
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\jogos.mp3"))
-            time.sleep(16.5)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
-
-@bot.command(name="jogos?")
-async def jogos(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            await sair(vc.connect())
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\jogoss.mp3"))
-            time.sleep(17.1)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
-
-@bot.command(name="sexta")
-async def rico(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            await sair(vc.connect())
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\sexta.mp3"))
-            time.sleep(29.75)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz") 
-
-@bot.command(name="quinta")
-async def rico(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            await sair(vc.connect())
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\quinta.mp3"))
-            time.sleep(6)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz") 
-
-@bot.command(name="rico")
-async def rico(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            await sair(vc.connect())
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\rico.mp3"))
-            time.sleep(6)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")        
-
-@bot.command(name="li")
-async def li(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            await sair(vc.connect())
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\pc.mp3"))
-            time.sleep(6.5)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
-
-@bot.command(name="intro")
-async def intro(ctx, arg):
-    vc = ctx.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            sair(vc)
-        else:
-            try:
-                i = 0
-                while i<int(arg):
-                    channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\intro.mp3"))
-                    time.sleep(6.5)
-                    i += 1
-                await sair(channel)
-            except:
-                print("Não conseguiu cantar")
-            await sair(channel)
-    else:
-        await ctx.channel.send("Você não está em um canal de voz")
-
-@intro.error
-async def intro(ctx, error):
-    if isinstance(error,commands.MissingRequiredArgument):
-        try: 
-            vc = ctx.author.voice.channel
-            channel = await vc.connect()
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\intro.mp3"))
-            time.sleep(6.5)
-            await sair(channel)
-        except:
-            sair(vc)
-
-@bot.command(name="whatsapp")
-async def whatsapp(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            await sair(vc.connect())
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\whatsapp.mp3"))
-            time.sleep(2)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
-
-@bot.command(name="parabains")
-async def parabains(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
+@bot.command(name="Novo")
+@commands.is_owner()
+async def Novo(ctx, *arg):
+    duracao = NULL 
+    for text in arg:
+        resultado = DB.Comando(text)
+        if resultado == 0:
+            comando = text
         try:
-            channel = await vc.connect()
+            duracao = float(text)
         except:
-            await sair(vc)
-        else:   
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\parabains.mp3"))
-            time.sleep(11.3)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
+            continue
 
-@bot.command(name="hamster")
-async def hamster(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try:
-            channel = await vc.connect()
-        except:
-            sair(vc)
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\hamster.mp3"))
-            time.sleep(3.7)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
+    if duracao != NULL:
+        print(DB.Comando_insert(comando, duracao))
 
-@bot.command(name="hatsune")
-async def hatsune(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try:   
-            channel = await vc.connect()
-        except:
-            sair(vc)
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\hatsune.mp3"))
-            time.sleep(3.8)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
+####
 
-@bot.command(name="kkkk")
-async def kkkk(ctx, arg):
-    vc = ctx.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            sair(vc)
-        else:
-            try:
-                i = 0
-                while i<int(arg):
-                    channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\topgear.mp3"))
-                    time.sleep(1.5)
-                    i += 1
-                await sair(channel)
-            except:
-                print("Não conseguiu peidar")
-    else:
-        await ctx.channel.send("Você não está em um canal de voz")
+@bot.command
+async def sair(vc):
+    await sair(vc)
 
-@kkkk.error
-async def kkkk(ctx, error):
-    if isinstance(error,commands.MissingRequiredArgument):
-        try: 
-            vc = ctx.author.voice.channel
-            channel = await vc.connect()
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\topgear.mp3"))
-            time.sleep(1.5)
-            await sair(channel)
-        except:
-            sair(vc)
-
-@bot.command(name="fart")
-async def fart(ctx, arg):
-    vc = ctx.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            sair(vc)
-        else:
-            try:
-                i = 0
-                while i<int(arg):
-                    channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\fart.mp3"))
-                    time.sleep(2)
-                    i += 1
-                await sair(channel)
-            except:
-                print("Não conseguiu peidar")
-    else:
-        await ctx.channel.send("Você não está em um canal de voz")
-
-@fart.error
-async def fart(ctx, error):
-    if isinstance(error,commands.MissingRequiredArgument):
-        try: 
-            vc = ctx.author.voice.channel
-            channel = await vc.connect()
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\fart.mp3"))
-            time.sleep(2)
-            await sair(channel)
-        except:
-            sair(vc)
-        
-@bot.command(name="bonequinha")
-async def bonequinha(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try:
-            channel = await vc.connect()
-        except:
-            sair(vc)
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\boneca.mp3"))
-            time.sleep(3)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
-
-@bot.command(name="eeeeh")
-async def eeeeh(ctx, arg):
-    vc = ctx.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            sair(vc)
-        else:
-            try:
-                i = 0
-                while i<int(arg):
-                    channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\eeeeh.mp3"))
-                    time.sleep(1.1)
-                    i += 1
-                await sair(channel)
-            except:
-                print("Não conseguiu cantar")
-            await sair(channel)
-    else:
-        await ctx.channel.send("Você não está em um canal de voz")
-
-@eeeeh.error
-async def eeeeh(ctx, error):
-    if isinstance(error,commands.MissingRequiredArgument):
-        try: 
-            vc = ctx.author.voice.channel
-            channel = await vc.connect()
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\eeeeh.mp3"))
-            time.sleep(1)
-            await sair(channel)
-        except:
-            sair(vc)
-
-@bot.command(name="fartr")
-async def fartr(ctx, arg):
-    vc = ctx.author.voice.channel
-    if vc != type(None):
-        try: 
-            channel = await vc.connect()
-        except:
-            sair(vc)
-        else:
-            try:
-                i = 0
-                while i<int(arg):
-                    channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\reverb.mp3"))
-                    time.sleep(6.3)
-                    i += 1
-                await sair(channel)
-            except:
-                print("Não conseguiu peidar")
-    else:
-        await ctx.channel.send("Você não está em um canal de voz")
-
-@fartr.error
-async def fartr(ctx, error):
-    if isinstance(error,commands.MissingRequiredArgument):
-        try: 
-            vc = ctx.author.voice.channel
-            channel = await vc.connect()
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\reverb.mp3"))
-            time.sleep(6.3)
-            await sair(channel)
-        except:
-            sair(vc)
-
-@bot.command(name="pex")
-async def pex(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try:
-            channel = await vc.connect()
-        except:
-            sair(vc)
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\pedrero.mp3"))
-            time.sleep(8)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
-
-@bot.command(name="banner")
-async def banners(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try:
-            channel = await vc.connect()
-        except:
-            sair(vc)
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\banner.mp3"))
-            time.sleep(5)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
-
-@bot.command(name="habibs")
-async def habibs(message):
-    vc = message.author.voice.channel
-    if vc != type(None):
-        try:
-            channel = await vc.connect()
-        except:
-            sair(vc)
-        else:
-            channel.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source="C:\\Users\\Gabriel\\Desktop\\prog\\Python\\habibs.mp3"))
-            time.sleep(29)
-            await sair(channel)
-    else:
-        await message.channel.send("Você não está em um canal de voz")
-#try:
-#    con = psycopg2.connect(database="Habibs", user="postgres", password="postgres", host="localhost", port="5432")
-#    print("Database opened successfully")
-#    inicio(con)
-#except:
-#    print("Não foi possível iniciar o banco de dados")
-
-@bot.command(name="sair")
-async def sair(message):
-    await sair(message.channel)
 
 async def sair(vc):
     await vc.disconnect()
+
 token = os.getenv('token')
 bot.run(token)
 
