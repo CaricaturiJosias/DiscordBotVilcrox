@@ -1,18 +1,20 @@
 #This is a discord bot made to annoy a friend, please be gentle 
 from asyncio.windows_events import NULL
-from logging import NullHandler
-import discord, os, discord.utils, time, _thread as thread
-import HabibsDB as HDB
+import discord, os, discord.utils, time
+import VilcroxDB as VDB
+import checagem as check
 from dotenv import load_dotenv
 from discord.ext import commands
 from discord import FFmpegPCMAudio
-load_dotenv()
-bot = commands.Bot(command_prefix = "h ", owner_id = 183653926598475776)
 
-DB = HDB.Database()
+load_dotenv()
+bot = commands.Bot(command_prefix = "vitor ", owner_id = 183653926598475776)
+
+DB = VDB.Database()
 @bot.before_invoke
 async def common(message):
-       DB.user_check(str(message.author.id), message.author.display_name)
+        DB.user_check(str(message.author.id), message.author.display_name)
+        DB.guild_check(str(message.guild.id), message.guild.name)
 
 MensagemProibida = ["lepo","lepo lepo", "kid abelha", "coringatron"]
 habibsalvos= [206225035332026368, 338052801286635520, 183653926598475776, 266301388059967489, 266301388059967489]
@@ -52,6 +54,7 @@ async def urbs(message):
         await message.channel.send(embed=embedV)
     else:
         await message.channel.send(f'Você não tem permissão para usar esse comando <@{message.author.id}>, bata no vitor se concorda/discorda disso')
+              
 
 @bot.command(pass_context = True)
 async def mov(ctx, arg):
@@ -74,7 +77,7 @@ async def mov(ctx):
                             " para tentar conseguir a permissão (Drop raro [0.005% de não conseguir])")
 
 #####
-@bot.command(name="m")
+@bot.command(name="é")
 async def m(ctx, *arg):
     duracao = NULL 
     repeticao = 1
@@ -105,30 +108,26 @@ async def Play(ctx, comando, duracao, repeticao):
                     vc.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source=f'D:\\Audio_Bot\\{comando}.mp3'))
                     time.sleep(duracao)
                     i += 1
+                await register(comando, ctx.author.id, ctx.guild.id, repeticao)
                 await sair(vc)
             except:
+                await sair(vc)
                 print("lmao")
 #####
 
 ####
 
-@bot.command(name="Novo")
+@bot.command(name="novo")
 @commands.is_owner()
-async def Novo(ctx, *arg):
-    duracao = NULL 
-    for text in arg:
-        resultado = DB.Comando(text)
-        if resultado == 0:
-            comando = text
-        try:
-            duracao = float(text)
-        except:
-            continue
-
-    if duracao != NULL:
-        print(DB.Comando_insert(comando, duracao))
+async def Novo(ctx, arg1, arg2):
+    resposta = check.leitura(arg1, arg2)
+    if resposta != [0,0]:
+        DB.Comando_insert(resposta)
 
 ####
+
+async def register(comando, id_user, id_guild, repeticao):
+    await DB.Comando_register(comando, id_user, id_guild, repeticao)
 
 @bot.command
 async def sair(vc):
