@@ -8,13 +8,14 @@ from discord.ext import commands
 from discord import FFmpegPCMAudio
 
 load_dotenv()
-bot = commands.Bot(command_prefix = "vitor ", owner_id = 183653926598475776)
+bot = commands.Bot(command_prefix = "v ", owner_id = 183653926598475776)
 
 DB = VDB.Database()
 @bot.before_invoke
 async def common(message):
-        DB.user_check(str(message.author.id), message.author.display_name)
         DB.guild_check(str(message.guild.id), message.guild.name)
+        DB.user_check(str(message.author.id), str(message.guild.id), message.author.display_name)
+        
 
 MensagemProibida = ["lepo","lepo lepo", "kid abelha", "coringatron"]
 habibsalvos= [206225035332026368, 338052801286635520, 183653926598475776, 266301388059967489, 266301388059967489]
@@ -56,7 +57,7 @@ async def urbs(message):
         await message.channel.send(f'Você não tem permissão para usar esse comando <@{message.author.id}>, bata no vitor se concorda/discorda disso')
               
 
-@bot.command(pass_context = True)
+@bot.command(name="mov")
 async def mov(ctx, arg):
     try:
         canal_antes = ctx.message.author.voice.channel
@@ -77,8 +78,8 @@ async def mov(ctx):
                             " para tentar conseguir a permissão (Drop raro [0.005% de não conseguir])")
 
 #####
-@bot.command(name="é")
-async def m(ctx, *arg):
+@bot.command(name="c")
+async def é(ctx, *arg):
     duracao = NULL 
     repeticao = 1
     for text in arg:
@@ -99,7 +100,7 @@ async def Play(ctx, comando, duracao, repeticao):
         try: 
             vc = await channel.connect()
         except:
-            sair(channel)
+            await sair(ctx)
 
         else:
             try:
@@ -108,10 +109,10 @@ async def Play(ctx, comando, duracao, repeticao):
                     vc.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source=f'D:\\Audio_Bot\\{comando}.mp3'))
                     time.sleep(duracao)
                     i += 1
-                await register(comando, ctx.author.id, ctx.guild.id, repeticao)
-                await sair(vc)
+                await register(comando, ctx.author.id, ctx.guild.id, ctx.channel, ctx.channel.voice, repeticao)
+                await sair(ctx)
             except:
-                await sair(vc)
+                await sair(ctx)
                 print("lmao")
 #####
 
@@ -126,16 +127,16 @@ async def Novo(ctx, arg1, arg2):
 
 ####
 
-async def register(comando, id_user, id_guild, repeticao):
-    await DB.Comando_register(comando, id_user, id_guild, repeticao)
+async def register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao):
+    await DB.Comando_register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao)
 
 @bot.command
-async def sair(vc):
-    await sair(vc)
+async def sair(ctx):
+    await sair(ctx)
 
 
-async def sair(vc):
-    await vc.disconnect()
+async def sair(ctx):
+    await ctx.voice_client.disconnect()
 
 token = os.getenv('token')
 bot.run(token)
