@@ -115,16 +115,14 @@ async def Play(ctx, comando, duracao, repeticao):
                 await sair(ctx)
                 print("lmao")
 #####
-@bot.command(name="help")
-async def help(ctx):
+@bot.command(name="ajuda")
+async def ajuda(ctx):
     comandos = DB.comando_list()
-    embedV = discord.Embed(title="Comandos do bot", colour=discord.Colour(0x393f2e), url="https://www.youtube.com/watch?v=29Cfu-6QWEk")
-    embedV.set_author(name="Jon xi nah", url="https://www.youtube.com/watch?v=29Cfu-6QWEk", icon_url="https://i.redd.it/a1zcxisgjls71.png")
-    embedV.set_image(url="https://cdn.discordapp.com/attachments/807369656021024808/807369730435973120/habobs_1.jpg")
-    embedV.set_thumbnail(url="https://cdn.discordapp.com/attachments/807369656021024808/807371639033036820/unknown.png")
-    embedV.set_footer(text="Foto do local por ren...anônimo", icon_url="https://cdn.discordapp.com/attachments/549252054347153439/807369261004750858/logo_habibs_1.jpg")
-    embedV.add_field(name="😱", value="ELE DA RÉ NO QUIBE???", inline=True)
-    embedV.add_field(name= "😱",value="~~sempre deu~~ PARECE QUE SIM", inline=True)
+    embedV = discord.Embed(title="Comandos do bot", colour=discord.Colour(0x393f2e), url="https://www.youtube.com/watch?v=qjnREde32XM&t=43s")
+    embedV.set_author(name="Jon xi nah", url="https://github.com/CaricaturiJosias/DiscordBotVilcrox", icon_url="https://i.redd.it/a1zcxisgjls71.png")
+    embedV.set_image(url="http://images7.memedroid.com/images/UPLOADED740/612ee967b8afb.jpeg")
+    for k in comandos:
+        embedV.add_field(name=f'{k[0]}', value=f'Duracao: {k[1]} segundos', inline=True)
     await ctx.channel.send(embed=embedV)
 ####
 
