@@ -84,6 +84,20 @@ class Database:
             self.close(cursor)
             return a #1 se já existe
 
+    def comando_list(self):
+        cursor = self.db.cursor()
+        try:
+            cursor.execute('SELECT Comando FROM ComandosVoz ORDER BY Comando')
+            a = deepcopy(cursor.fetchall())
+            comandos = list()
+            duracao = list()
+            for k in a:
+                comandos.append(k[0])
+                duracao.append(k[1])
+            return comandos, duracao
+        except:
+            print("ono")
+
     async def Comando_register(self, comando, id_user, id_vc, id_canal_texto, id_guild, repeticao):
         cursor = self.db.cursor()
         try:

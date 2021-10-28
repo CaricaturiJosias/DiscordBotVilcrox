@@ -115,7 +115,17 @@ async def Play(ctx, comando, duracao, repeticao):
                 await sair(ctx)
                 print("lmao")
 #####
-
+@bot.command(name="help")
+async def help(ctx):
+    comandos = DB.comando_list()
+    embedV = discord.Embed(title="Comandos do bot", colour=discord.Colour(0x393f2e), url="https://www.youtube.com/watch?v=29Cfu-6QWEk")
+    embedV.set_author(name="Jon xi nah", url="https://www.youtube.com/watch?v=29Cfu-6QWEk", icon_url="https://i.redd.it/a1zcxisgjls71.png")
+    embedV.set_image(url="https://cdn.discordapp.com/attachments/807369656021024808/807369730435973120/habobs_1.jpg")
+    embedV.set_thumbnail(url="https://cdn.discordapp.com/attachments/807369656021024808/807371639033036820/unknown.png")
+    embedV.set_footer(text="Foto do local por ren...anônimo", icon_url="https://cdn.discordapp.com/attachments/549252054347153439/807369261004750858/logo_habibs_1.jpg")
+    embedV.add_field(name="😱", value="ELE DA RÉ NO QUIBE???", inline=True)
+    embedV.add_field(name= "😱",value="~~sempre deu~~ PARECE QUE SIM", inline=True)
+    await ctx.channel.send(embed=embedV)
 ####
 
 @bot.command(name="novo")
