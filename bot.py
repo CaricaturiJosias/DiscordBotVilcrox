@@ -90,8 +90,12 @@ async def é(ctx, *arg):
 
         if text.isnumeric():
             repeticao = int(text)
-    if duracao != NULL:
-        await Play(ctx, comando, duracao, repeticao)
+    try:
+        if duracao != NULL:
+            await Play(ctx, comando, duracao, repeticao)
+    except:
+                await sair(ctx)
+                print("lmao")
 
 async def Play(ctx, comando, duracao, repeticao):
     channel = ctx.author.voice.channel
@@ -118,7 +122,7 @@ async def Play(ctx, comando, duracao, repeticao):
 @bot.command(name="ajuda")
 async def ajuda(ctx):
     comandos = DB.comando_list()
-    embedV = discord.Embed(title="Comandos do bot", colour=discord.Colour(0x393f2e), url="https://www.youtube.com/watch?v=qjnREde32XM&t=43s")
+    embedV = discord.Embed(title="Comandos do bot", colour=discord.Colour(0x393f2e), url="https://youtu.be/qjnREde32XM")
     embedV.set_author(name="Jon xi nah", url="https://github.com/CaricaturiJosias/DiscordBotVilcrox", icon_url="https://i.redd.it/a1zcxisgjls71.png")
     embedV.set_image(url="http://images7.memedroid.com/images/UPLOADED740/612ee967b8afb.jpeg")
     for k in comandos:
@@ -138,7 +142,7 @@ async def Novo(ctx, arg1, arg2):
 async def register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao):
     await DB.Comando_register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao)
 
-@bot.command
+@bot.command(name="sair")
 async def sair(ctx):
     await sair(ctx)
 

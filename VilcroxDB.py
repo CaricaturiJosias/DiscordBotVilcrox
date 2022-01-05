@@ -33,7 +33,7 @@ class Database:
                             cursor.execute(f'INSERT INTO Aliases_Guilds VALUES ("{id_guild}", "{nome}")')
 
         else:
-            cursor.execute(f'INSERT INTO Guilds VALUES ("{id_guild}")')         #Registra o ID
+            cursor.execute(f'INSERT INTO Guilds VALUES ("{id_guild}")')                     #Registra o ID
             cursor.execute(f'INSERT INTO Aliases_Guilds VALUES ("{id_guild}","{nome}")')    #Registra o Alias
         cursor.close()
         self.db.commit()

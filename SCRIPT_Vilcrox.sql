@@ -1,4 +1,4 @@
-create bot_habibs
+create bot_habibs;
 use bot_habibs;
 
 create table Usuarios(
