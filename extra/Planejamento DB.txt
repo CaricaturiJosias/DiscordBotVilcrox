@@ -1,0 +1,37 @@
+Guild
+	id
+	canal de texto
+	id
+	canal de voz
+	id
+
+Usuario
+	id
+
+Comandos
+	nome
+
+CREATE TABLE Guild(
+	ID_Guild char(18),
+	primary key (id_guild)
+);
+
+CREATE TABLE Canal_Texto(
+	ID_Text_Channel char(18),
+	ID_Guild char(18),
+	primary key (ID_Text_Channel),
+	foreign key (ID_Guild) references Guild(ID_Guild)	
+);
+
+CREATE TABLE Canal_Voz(
+	ID_Voice char(18),
+	ID_Guild char(18),
+	primary key (ID_Voice),
+	foreign key (ID_Guild) references Guild(ID_Guild)	
+);
+
+CREATE TABLE Comando(
+	nome varchar(30),
+	primary key (nome)
+);
+

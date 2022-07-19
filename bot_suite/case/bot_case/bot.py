@@ -1,21 +1,16 @@
 #This is a discord bot made to annoy a friend, please be gentle 
+
+from asyncio import wait_for
 from asyncio.windows_events import NULL
-import discord, os, discord.utils, time
-import VilcroxDB as VDB
-import checagem as check
-from dotenv import load_dotenv
+import discord, discord.utils, time, sys
+
+sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/tools")
+import helpers as help
+
 from discord.ext import commands
 from discord import FFmpegPCMAudio
 
-load_dotenv()
-bot = commands.Bot(command_prefix = "v ", owner_id = 183653926598475776)
-
-DB = VDB.Database()
-@bot.before_invoke
-async def common(message):
-        DB.guild_check(str(message.guild.id), message.guild.name)
-        DB.user_check(str(message.author.id), str(message.guild.id), message.author.display_name)
-        
+bot = commands.Bot(command_prefix = "v ", owner_id = 183653926598475776)   
 
 MensagemProibida = ["lepo","lepo lepo", "kid abelha", "coringatron"]
 habibsalvos= [206225035332026368, 338052801286635520, 183653926598475776, 266301388059967489, 266301388059967489]
@@ -77,6 +72,14 @@ async def mov(ctx):
     await ctx.channel.send(f"Você não possui a permissão necessária para fazer isso, bata no <@{206225035332026368}>"+
                             " para tentar conseguir a permissão (Drop raro [0.005% de não conseguir])")
 
+@bot.command(name="sair")
+async def sair(ctx):
+    channel = ctx.author.voice.channel
+    try:
+        await bot._connection
+    except:
+        print("Deu não")
+
 #####
 @bot.command(name="c")
 async def é(ctx, *arg):
@@ -92,32 +95,35 @@ async def é(ctx, *arg):
             repeticao = int(text)
     try:
         if duracao != NULL:
-            await Play(ctx, comando, duracao, repeticao)
+            if help.checagem(queue, ctx.author.id, ctx.author.name, comando) == 1 and len(queue) == 1:
+                await Play(ctx, comando, duracao, repeticao)
+                queue.pop(0)
+            elif len(queue) > 1:
+                await ctx.channel.send("Colocando na queue")
+            else:
+                await ctx.channel.send("Não foi possível iniciar este comando\nSinto muito")
     except:
-                await sair(ctx)
-                print("lmao")
+                await saida(ctx)
 
 async def Play(ctx, comando, duracao, repeticao):
     channel = ctx.author.voice.channel
-    if channel != type(None):
-
-        try: 
-            vc = await channel.connect()
+    if channel == type(None):
+        return None
+    try: 
+        vc = await channel.connect()
+    except:
+        ctx.channel.send("Não consegui me conectar")
+    else:
+        try:
+            i = 0
+            while i < repeticao:
+                vc.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source=f'D:\\Audio_Bot\\{comando}.mp3'))
+                time.sleep(duracao)
+                i += 1
+            await register(comando, ctx.author.id, ctx.author.voice.channel, ctx.channel, ctx.guild.id, repeticao)
+            await saida(vc)
         except:
-            await sair(ctx)
-
-        else:
-            try:
-                i = 0
-                while i < repeticao:
-                    vc.play(FFmpegPCMAudio(executable="C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe", source=f'D:\\Audio_Bot\\{comando}.mp3'))
-                    time.sleep(duracao)
-                    i += 1
-                await register(comando, ctx.author.id, ctx.guild.id, ctx.channel, ctx.channel.voice, repeticao)
-                await sair(ctx)
-            except:
-                await sair(ctx)
-                print("lmao")
+            await saida(vc)
 #####
 @bot.command(name="ajuda")
 async def ajuda(ctx):
@@ -132,24 +138,32 @@ async def ajuda(ctx):
 
 @bot.command(name="novo")
 @commands.is_owner()
-async def Novo(ctx, arg1, arg2):
-    resposta = check.leitura(arg1, arg2)
-    if resposta != [0,0]:
-        DB.Comando_insert(resposta)
-
+async def Novo(ctx, nome, duracao):
+    print("Arg1 = "+str(nome))
+    print("Arg2 = "+str(duracao))
+    try: 
+        resposta = help.leitura(nome, duracao)
+        if resposta != [0,0]:
+            DB.Comando_insert(resposta)
+            ctx.chanel.send("Inserido com sucesso")
+    except:
+        print("Erro")
 ####
+
+async def waiting(queue):
+    value = len(queue)-1
+    
+    while (value != len(queue)):
+        pass
+    return 1
 
 async def register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao):
     await DB.Comando_register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao)
+    return None
 
-@bot.command(name="sair")
-async def sair(ctx):
-    await sair(ctx)
+async def saida(ctx):
+    await ctx.disconnect()
+    ctx.cleanup()
 
 
-async def sair(ctx):
-    await ctx.voice_client.disconnect()
-
-token = os.getenv('token')
-bot.run(token)
 

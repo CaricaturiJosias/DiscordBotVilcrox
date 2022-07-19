@@ -3,6 +3,7 @@ import os, mysql.connector as mysql
 from datetime import datetime
 from copy import deepcopy
 from dotenv import load_dotenv
+
 class Database:
 
     def __init__(self):
@@ -92,6 +93,7 @@ class Database:
             return a
         except:
             print("ono")
+            return None
 
     async def Comando_register(self, comando, id_user, id_vc, id_canal_texto, id_guild, repeticao):
         cursor = self.db.cursor()
@@ -102,6 +104,8 @@ class Database:
             self.close(cursor)
         except:
             print("Erro no comando_register")
+            self.close(cursor)
+        return None
 
         
 
