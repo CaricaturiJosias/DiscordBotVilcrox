@@ -33,3 +33,29 @@ def get_env(bot):
   load_dotenv()
   token = os.getenv('token')
   bot.run(token)
+
+async def waiting(queue):
+    value = len(queue)-1
+    
+    while (value != len(queue)):
+        pass
+    return 1
+  
+async def register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao):
+    await DB.Comando_register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao)
+    return None
+
+async def waiting(queue):
+    value = len(queue)-1
+    
+    while (value != len(queue)):
+        pass
+    return 1
+
+async def register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao):
+    await DB.Comando_register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao)
+    return None
+
+async def saida(ctx):
+    await ctx.disconnect()
+    ctx.cleanup()
