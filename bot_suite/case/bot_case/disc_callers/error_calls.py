@@ -6,7 +6,6 @@ from discord.ext import commands
 from discord import FFmpegPCMAudio
 
 dir_path =  os.path.dirname(__file__)
-print(dir_path)
 
 sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/tools")
 import helpers as help
@@ -18,17 +17,18 @@ async def PingarVitor(ctx, error):
 
 async def mov(ctx, error):
     await ctx.channel.send(f"Você não possui a permissão necessária para fazer isso, bata no <@{206225035332026368}>"+
-                            " para tentar conseguir a permissão (Drop raro [0.005%% de não conseguir])")
+                            " para tentar conseguir a permissão (Drop raro [0.005% de não conseguir])")
+    print(error)
 
 async def PingarVitor(ctx, error):
-    await ctx.channel.send('Não se pode chamar a grande propaganda da urbs 😂💦')
+    await ctx.channel.send('Não se pode chamar a grande propaganda da urbs  😂💦')
 
 async def sair(ctx, error):
     await ctx.channel.send('Não foi possível sair')
     print(f"Não foi possível sair do canal {ctx.message.author.voice.channel}")
 
-async def é(ctx, error):
-    await ctx.channel.send('Não foi possível iniciar um turbulhão itararé 😛💦')
+# async def é(ctx, error):
+#     await ctx.channel.send('Não foi possível iniciar um turbulhão itararé  😛💦')
 
 async def ajuda(ctx, error):
     await ctx.channel.send('Houve algum problema mostrando os comandos')

@@ -1,6 +1,3 @@
-from dotenv import load_dotenv
-import os
-
 def leitura(texto, tempo):
     print("Comado: "+texto+"\nDuracao: "+tempo)
     if isfloat(tempo):
@@ -29,11 +26,6 @@ def checagem(queue, id, user, comand):
     print("Falha ao tentar criar comando")
     return 0
 
-def get_env(bot):
-  load_dotenv()
-  token = os.getenv('token')
-  bot.run(token)
-
 async def waiting(queue):
     value = len(queue)-1
     
@@ -42,7 +34,7 @@ async def waiting(queue):
     return 1
   
 async def register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao):
-    await DB.Comando_register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao)
+    # await DB.Comando_register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao)
     return None
 
 async def waiting(queue):
@@ -53,7 +45,7 @@ async def waiting(queue):
     return 1
 
 async def register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao):
-    await DB.Comando_register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao)
+    # await DB.Comando_register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao)
     return None
 
 async def saida(ctx):

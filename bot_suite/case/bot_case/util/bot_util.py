@@ -23,8 +23,8 @@ async def Play(ctx, comando, duracao, repeticao):
                 time.sleep(duracao)
                 i += 1
             await help.register(comando, ctx.author.id, ctx.author.voice.channel, ctx.channel, ctx.guild.id, repeticao)
-            await saida(vc)
+            await help.saida(vc)
         except:
-            await saida(vc)
+            await help.saida(vc)
 
     

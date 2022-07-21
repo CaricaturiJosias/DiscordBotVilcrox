@@ -6,7 +6,6 @@ from discord.ext import commands
 from discord import FFmpegPCMAudio
 
 dir_path =  os.path.dirname(__file__)
-print(dir_path)
 
 sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/tools")
 import helpers as help
@@ -44,13 +43,12 @@ async def mov(ctx, arg):
         canal_antes = ctx.message.author.voice.channel
         guild = ctx.guild
         channel = guild.get_channel(guild.afk_channel.id)
-        print(str(channel))
-        idVitima = (((arg.split('!'))[1]).split('>'))[0]
+        idVitima = (((arg.split('@'))[1]).split('>'))[0]
         vitima = await guild.fetch_member(int(idVitima))
         await vitima.move_to(channel)
         time.sleep(2)
         await vitima.move_to(canal_antes)
-    except:
+    except Exception as e:
         print(f"Não foi possível mover o usuario {vitima.name}")
 
 async def sair(ctx, bot):
@@ -60,45 +58,45 @@ async def sair(ctx, bot):
     except:
         print("Deu não")
 
-async def é(ctx, *arg):
-    duracao = NULL 
-    repeticao = 1
-    for text in arg:
-        resultado = DB.Comando(text)
-        if resultado != 0:
-            comando = text
-            duracao = resultado
+# async def é(ctx, *arg):
+#     duracao = NULL 
+#     repeticao = 1
+    # for text in arg:
+    #     resultado = DB.Comando(text)
+    #     if resultado != 0:
+    #         comando = text
+    #         duracao = resultado
 
-        if text.isnumeric():
-            repeticao = int(text)
-    try:
-        if duracao != NULL:
-            if help.checagem(queue, ctx.author.id, ctx.author.name, comando) == 1 and len(queue) == 1:
-                await Play(ctx, comando, duracao, repeticao)
-                queue.pop(0)
-            elif len(queue) > 1:
-                await ctx.channel.send("Colocando na queue")
-            else:
-                await ctx.channel.send("Não foi possível iniciar este comando\nSinto muito")
-    except:
-                await saida(ctx)
+    #     if text.isnumeric():
+    #         repeticao = int(text)
+    # try:
+    #     if duracao != NULL:
+    #         if help.checagem(queue, ctx.author.id, ctx.author.name, comando) == 1 and len(queue) == 1:
+    #             await Play(ctx, comando, duracao, repeticao)
+    #             queue.pop(0)
+    #         elif len(queue) > 1:
+    #             await ctx.channel.send("Colocando na queue")
+    #         else:
+    #             await ctx.channel.send("Não foi possível iniciar este comando\nSinto muito")
+    # except:
+    #             await saida(ctx)
 
 async def ajuda(ctx):
-    comandos = DB.comando_list()
+    # comandos = DB.comando_list()
     embedV = discord.Embed(title="Comandos do bot", colour=discord.Colour(0x393f2e), url="https://youtu.be/qjnREde32XM")
     embedV.set_author(name="Jon xi nah", url="https://github.com/CaricaturiJosias/DiscordBotVilcrox", icon_url="https://i.redd.it/a1zcxisgjls71.png")
     embedV.set_image(url="http://images7.memedroid.com/images/UPLOADED740/612ee967b8afb.jpeg")
-    for k in comandos:
-        embedV.add_field(name=f'{k[0]}', value=f'Duracao: {k[1]} segundos', inline=True)
+    # for k in comandos:
+    #     embedV.add_field(name=f'{k[0]}', value=f'Duracao: {k[1]} segundos', inline=True)
     await ctx.channel.send(embed=embedV)
 
 async def Novo(ctx, nome, duracao):
     print("Arg1 = "+str(nome))
     print("Arg2 = "+str(duracao))
-    try: 
-        resposta = help.leitura(nome, duracao)
-        if resposta != [0,0]:
-            DB.Comando_insert(resposta)
-            ctx.chanel.send("Inserido com sucesso")
-    except:
-        print("Erro")
+    # try: 
+    #     resposta = help.leitura(nome, duracao)
+    #     if resposta != [0,0]:
+    #         DB.Comando_insert(resposta)
+    #         ctx.chanel.send("Inserido com sucesso")
+    # except:
+    #     print("Erro")
