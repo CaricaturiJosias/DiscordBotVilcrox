@@ -1,11 +1,13 @@
 from asyncio import wait_for
 from asyncio.windows_events import NULL
-import discord, discord.utils, time, sys, os
+from multiprocessing.sharedctypes import Value
+import discord, discord.utils, time, sys, os, re
 
 from discord.ext import commands
 from discord import FFmpegPCMAudio
 
 dir_path =os.path.dirname(__file__)
+import youtube_calls as youtube
 
 sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/tools")
 import helpers as help
@@ -14,6 +16,7 @@ import fire_con as fire
 
 sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/case/bot_case/util")
 import bot_util as bot
+
 
 def ready(bot):
     print(str(bot.user)+' has connected to Discord!')
@@ -115,14 +118,44 @@ async def Novo(ctx, *arg):
         await ctx.channel.send("Deu não 😨")
 
 async def delete(ctx, command : str):
-
     try:
-        if fire.delete_command(command):
-            await ctx.channel.send("Deletado 👍")
+        os.remove(f"D:/Cthings/prog/Bot-Python/audio/{command}.mp3")
+        if not fire.delete_command(command):
+            await ctx.channel.send("Esse comando não existe 👎")
             return
-
-        await ctx.channel.send("Esse comando não existe 👎")
+        print("delete")
+        await ctx.channel.send("Comando deletado")
+        return
 
     except Exception as e:
         print(e)
         await ctx.channel.send("Deu não\t🤡")
+
+async def add (ctx, *arg):
+    try:
+        if len(arg) < 3:
+            await ctx.channel.send("Não, não da pra fazer assim\t👀")
+            return
+        if not re.findall(const.YOUTUBE_REGEX, arg[0]):
+            await ctx.channel.send("Esse link não é válido\t🤓")
+            return
+
+        link = arg[0]
+        command = arg[1]
+
+        if not help.isfloat(float(arg[2])):
+            await ctx.channel.send("Duração do comando não válida\t😨")
+            return
+
+        duration = arg[2]
+
+        if fire.insert_command(command, duration) == False:
+            await ctx.channel.send("Esse comando já existe\t 🤬💢")
+            return
+
+        youtube.create_command(command, duration, link)
+
+        await ctx.channel.send("Comando criado\t 🔥🚀🔥")
+    except Exception as e:
+        print(e)
+

@@ -8,7 +8,7 @@ sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/tools")
 import helpers as help
 import constants as const
 
-async def Play(ctx, comando, duracao, repeticao):
+async def Play(ctx, comando, duracao, repetition):
     channel = ctx.author.voice.channel
     if channel == type(None):
         return None
@@ -19,18 +19,20 @@ async def Play(ctx, comando, duracao, repeticao):
         try:
             vc.disconnect()
         except:
-            await ctx.channel.send("Não consegui me conectar")
+            print("Não consegui me conectar")
 
-        await ctx.channel.send("Algo deu errado")
+        print("Algo deu errado")
 
     else:
 
         try:
-            i = 0
-            while i < repeticao:
-                vc.play(FFmpegPCMAudio(executable="C:/Program Files/ffmpeg/bin/ffmpeg.exe", source=f'D:/Cthings/prog/Bot-Python/audio/{comando}.mp3'))
-                time.sleep(duracao)
-                i += 1
+            print(repetition)
+            for i in range(repetition):
+                try:
+                    vc.play(FFmpegPCMAudio(executable="C:/Program Files/ffmpeg/bin/ffmpeg.exe", source=f'D:/Cthings/prog/Bot-Python/audio/{comando}.mp3'))
+                    time.sleep(const.SECONDS_0_5)
+                except Exception as e:
+                    print(e)
             await help.saida(vc)
 
         except:

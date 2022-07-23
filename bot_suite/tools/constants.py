@@ -18,6 +18,6 @@ MensagemProibida = [ "lepo"
                     ,"lepo lepo"
                     , "kid abelha"
                     , "coringatron"]
-
+YOUTUBE_REGEX       : str = "^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$"
 SECONDS_0_5         : int = 3
 SECONDS_60          : int = 60

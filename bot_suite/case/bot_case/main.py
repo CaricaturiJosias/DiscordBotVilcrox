@@ -86,11 +86,18 @@ async def Novo(ctx, *arg):
 async def Novo(ctx, error):
     await erro.Novo(ctx, error)
 
+@bot.command(name="add")
+@commands.is_owner()
+async def add(ctx, *arg):
+    await disc.add(ctx, *arg)
+@add.error
+async def add(ctx, error):
+    await erro.add(ctx, error)
+
 
 @bot.command(name="delete")
 @commands.is_owner()
 async def delete(ctx, nome):
-    print("delete")
     await disc.delete(ctx, nome)
 @delete.error
 async def delete(ctx, error):

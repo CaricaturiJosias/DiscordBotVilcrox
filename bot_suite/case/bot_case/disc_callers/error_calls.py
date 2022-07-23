@@ -38,3 +38,6 @@ async def ajuda(ctx, error):
 
 async def delete(ctx, error):
     await ctx.channel.send('Houve algum problema deletando o comando')
+
+async def add(ctx, error):
+    await ctx.channel.send('Houve algum problema baixando e criando o comando')
