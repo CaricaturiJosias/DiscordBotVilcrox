@@ -2,6 +2,7 @@ def leitura(texto, tempo):
     if isfloat(tempo):
         tempo = float(tempo)
         return [texto, tempo]
+    return [0, 0]
 
 def isfloat(value):
   try:

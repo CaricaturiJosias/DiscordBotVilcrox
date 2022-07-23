@@ -91,20 +91,38 @@ async def ajuda(ctx):
     #     embedV.add_field(name=f'{k[0]}', value=f'Duracao: {k[1]} segundos', inline=True)
     await ctx.channel.send(embed=embedV)
 
-async def Novo(ctx, command, duration):
+async def Novo(ctx, *arg):
     try:
-        if help.leitura(command, duration) != [0,0]:
-            if fire.insert_command(command, duration) == False:
-                await ctx.channel.send("Esse comando já existe\t 🤬💢")
-                return
-            await ctx.channel.send("Inserido com sucesso 👍")
+        if  len(arg) == 1:
+            await ctx.channel.send("🤓?")
+            return
+
+        command = arg[0]
+        duration = arg[1]
+
+        if help.leitura(command, duration) == [0,0]:
+            await ctx.channel.send("Tem algo errado 🤔")
+            return
+
+        if fire.insert_command(command, duration) == False:
+            await ctx.channel.send("Esse comando já existe\t 🤬💢")
+            return
+
+        await ctx.channel.send("Inserido com sucesso 👍")
+
     except Exception as e:
         print(e)
         await ctx.channel.send("Deu não 😨")
 
 async def delete(ctx, command : str):
+
     try:
-        fire.delete_command(command)
+        if fire.delete_command(command):
+            await ctx.channel.send("Deletado 👍")
+            return
+
+        await ctx.channel.send("Esse comando não existe 👎")
+
     except Exception as e:
         print(e)
         await ctx.channel.send("Deu não\t🤡")

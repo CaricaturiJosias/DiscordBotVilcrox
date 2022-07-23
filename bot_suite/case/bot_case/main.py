@@ -77,8 +77,8 @@ async def ajuda(ctx, error):
 
 @bot.command(name="novo")
 @commands.is_owner()
-async def Novo(ctx, nome, duracao):
-    await disc.Novo(ctx, nome, duracao)
+async def Novo(ctx, *arg):
+    await disc.Novo(ctx, *arg)
 @Novo.error
 async def Novo(ctx, error):
     await erro.Novo(ctx, error)
@@ -87,7 +87,7 @@ async def Novo(ctx, error):
 @commands.is_owner()
 async def delete(ctx, nome):
     await disc.delete(ctx, nome)
-@Novo.delete
+@delete.error
 async def delete(ctx, error):
     await erro.delete(ctx, error)
 

@@ -30,8 +30,11 @@ async def sair(ctx, error):
 # async def é(ctx, error):
 #     await ctx.channel.send('Não foi possível iniciar um turbulhão itararé  😛💦')
 
+async def Novo(ctx, error):
+    await ctx.channel.send('Houve algum problema inserindo o comando')
+
 async def ajuda(ctx, error):
     await ctx.channel.send('Houve algum problema mostrando os comandos')
 
 async def delete(ctx, error):
-    await ctx.channel.send('Houve algum problema mostrando os comandos')
+    await ctx.channel.send('Houve algum problema deletando o comando')

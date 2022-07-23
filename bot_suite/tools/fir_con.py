@@ -28,20 +28,28 @@ def insert_command(command : str, duration)-> bool:
     new_command = help.create_command_json(command, duration)
     f.write(new_command)
     f.close()
+
     try:
         with open(insert_path, "r") as f:
             file_contents = json.load(f)
-            print(file_contents)
         ref.update(file_contents)
+
     except:
         return False
+
     finally:
         os.remove(insert_path)
-    return True
+        return True
 
 def delete_command(command : str) ->bool:
     if not check_command(command):
         return False
-    ref = db.reference("/Commands/Command")
-    import json
-    ref.child(command).remove()
+
+    try:
+        ref = db.reference("/Commands/Command")
+        ref.child(command).delete()
+        return True
+
+    except Exception as e:
+        print(e)
+        return False
