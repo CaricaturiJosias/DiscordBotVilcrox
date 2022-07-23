@@ -84,12 +84,12 @@ async def é(ctx, *arg):
         print(e)
 
 async def ajuda(ctx):
-    # comandos = DB.comando_list()
+    comandos = fire.get_commands()
     embedV = discord.Embed(title="Comandos do bot", colour=discord.Colour(0x393f2e), url="https://youtu.be/qjnREde32XM")
     embedV.set_author(name="Jon xi nah", url="https://github.com/CaricaturiJosias/DiscordBotVilcrox", icon_url="https://i.redd.it/a1zcxisgjls71.png")
     embedV.set_image(url="http://images7.memedroid.com/images/UPLOADED740/612ee967b8afb.jpeg")
-    # for k in comandos:
-    #     embedV.add_field(name=f'{k[0]}', value=f'Duracao: {k[1]} segundos', inline=True)
+    for k in comandos:
+        embedV.add_field(name=f'{k[0]}', value=f'Duracao: {k[1]} segundos', inline=True)
     await ctx.channel.send(embed=embedV)
 
 async def Novo(ctx, *arg):

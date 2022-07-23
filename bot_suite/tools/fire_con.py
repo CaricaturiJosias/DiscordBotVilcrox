@@ -9,7 +9,7 @@ def connect_db():
     certificate_path = os.path.dirname(__file__) + "/firebase_con/bot-discord-cezario-firebase-adminsdk-tgigi-a8e006d36b.json"
     cred = credentials.Certificate(certificate_path)
     default_app = firebase_admin.initialize_app(cred,
-    {'databaseURL' : 'https://bot-discord-cezario-default-rtdb.firebaseio.com/'})
+    {'databaseURL':'https://bot-discord-cezario-default-rtdb.firebaseio.com/'})
 
 def check_command(command : str) -> True:
     ref = db.reference("/Commands")
@@ -63,3 +63,12 @@ def get_command(command : str):
     if help.isfloat(duration):
         return duration
     return -1
+
+def get_command_tuple(command : str, ref : firebase_admin.db) -> tuple:
+    return [command, ref.child(command).get()['Duration']]
+
+def get_commands() -> list:
+    ref = db.reference("/Commands")
+    fire_commands = ref.order_by_key().get()
+    return [get_command_tuple(command, ref) for command in fire_commands if command]
+

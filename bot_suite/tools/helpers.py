@@ -1,3 +1,4 @@
+
 def leitura(texto, tempo):
     if isfloat(tempo):
         tempo = float(tempo)

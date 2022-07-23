@@ -11,7 +11,7 @@ sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/tools")
 import helpers as help
 import constants as const
 
-async def PingarVitor(ctx, error):
+async def pingar_vitor(ctx, error):
     if isinstance(error,commands.MissingRequiredArgument):
         await ctx.channel.send(f'<@{206225035332026368}>, Não Sabia Que Você Tinha Virado Manobrista Do Habib\'s.')
 
@@ -20,7 +20,7 @@ async def mov(ctx, error):
                             " para tentar conseguir a permissão (Drop raro [0.005% de não conseguir])")
     print(error)
 
-async def PingarVitor(ctx, error):
+async def urbs(ctx, error):
     await ctx.channel.send('Não se pode chamar a grande propaganda da urbs  😂💦')
 
 async def sair(ctx, error):

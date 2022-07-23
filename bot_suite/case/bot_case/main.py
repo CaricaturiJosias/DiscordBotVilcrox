@@ -11,10 +11,10 @@ sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/tools")
 sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/case/bot_case/util")
 sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/case/bot_case/disc_callers")
 
-import helpers as help
 import discord_calls as disc
 import error_calls as erro
 import fire_con as fire
+import helpers as help
 
 dir_path =  os.path.dirname(__file__)
 bot = commands.Bot(command_prefix = "v ", owner_id = 183653926598475776)
@@ -61,7 +61,6 @@ async def sair(ctx, error):
 @bot.command(name="c")
 async def é(ctx, *arg):
     await disc.é(ctx, *arg)
-
 @é.error
 async def é(ctx, error):
     await erro.é(ctx, error)
@@ -83,6 +82,7 @@ async def Novo(ctx, *arg):
 async def Novo(ctx, error):
     await erro.Novo(ctx, error)
 
+
 @bot.command(name="delete")
 @commands.is_owner()
 async def delete(ctx, nome):
@@ -90,6 +90,7 @@ async def delete(ctx, nome):
 @delete.error
 async def delete(ctx, error):
     await erro.delete(ctx, error)
+
 
 load_dotenv()
 token = os.getenv('token')
