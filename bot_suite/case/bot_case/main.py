@@ -52,6 +52,7 @@ async def mov_error(ctx, error):
 
 @bot.command(name="sair")
 async def sair(ctx):
+    print("sair")
     await disc.sair(ctx)
 @sair.error
 async def sair(ctx, error):
@@ -59,15 +60,17 @@ async def sair(ctx, error):
 
 
 @bot.command(name="c")
-async def é(ctx, *arg):
-    await disc.é(ctx, *arg)
-@é.error
-async def é(ctx, error):
-    await erro.é(ctx, error)
+async def e(ctx, *arg):
+    await disc.e(ctx, *arg)
+
+@e.error
+async def e(ctx, error):
+    await erro.e(ctx, error)
 
 
 @bot.command(name="ajuda")
 async def ajuda(ctx):
+    print("ajuda")
     await disc.ajuda(ctx)
 @ajuda.error
 async def ajuda(ctx, error):
@@ -77,6 +80,7 @@ async def ajuda(ctx, error):
 @bot.command(name="novo")
 @commands.is_owner()
 async def Novo(ctx, *arg):
+    print("novo")
     await disc.Novo(ctx, *arg)
 @Novo.error
 async def Novo(ctx, error):
@@ -86,6 +90,7 @@ async def Novo(ctx, error):
 @bot.command(name="delete")
 @commands.is_owner()
 async def delete(ctx, nome):
+    print("delete")
     await disc.delete(ctx, nome)
 @delete.error
 async def delete(ctx, error):

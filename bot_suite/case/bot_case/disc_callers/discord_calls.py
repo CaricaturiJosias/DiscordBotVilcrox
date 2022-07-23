@@ -5,7 +5,7 @@ import discord, discord.utils, time, sys, os
 from discord.ext import commands
 from discord import FFmpegPCMAudio
 
-dir_path =  os.path.dirname(__file__)
+dir_path =os.path.dirname(__file__)
 
 sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/tools")
 import helpers as help
@@ -22,14 +22,14 @@ def ready(bot):
 
 async def urbs(message):
     if message.author.id in const.allowed_users:
-        embedV = discord.Embed(title="Vitor tristão virou manobrista do habib's?", colour=discord.Colour(0x393f2e), url="https://www.youtube.com/watch?v=29Cfu-6QWEk")
-        embedV.set_image(url="https://cdn.discordapp.com/attachments/807369656021024808/807369730435973120/habobs_1.jpg")
-        embedV.set_thumbnail(url="https://cdn.discordapp.com/attachments/807369656021024808/807371639033036820/unknown.png")
-        embedV.set_author(name="Marrone do Bruno e Marrone", url="https://www.youtube.com/watch?v=29Cfu-6QWEk", icon_url="https://cdn.discordapp.com/attachments/807369656021024808/807371275277434890/unknown.png")
-        embedV.set_footer(text="Foto do local por ren...anônimo", icon_url="https://cdn.discordapp.com/attachments/549252054347153439/807369261004750858/logo_habibs_1.jpg")
-        embedV.add_field(name="😱", value="ELE DA RÉ NO QUIBE???", inline=True)
-        embedV.add_field(name= "😱",value="~~sempre deu~~ PARECE QUE SIM", inline=True)
-        await message.channel.send(embed=embedV)
+        embed_message = discord.Embed(title="Vitor tristão virou manobrista do habib's?", colour=discord.Colour(0x393f2e), url="https://www.youtube.com/watch?v=29Cfu-6QWEk")
+        embed_message.set_image(url="https://cdn.discordapp.com/attachments/807369656021024808/807369730435973120/habobs_1.jpg")
+        embed_message.set_thumbnail(url="https://cdn.discordapp.com/attachments/807369656021024808/807371639033036820/unknown.png")
+        embed_message.set_author(name="Marrone do Bruno e Marrone", url="https://www.youtube.com/watch?v=29Cfu-6QWEk", icon_url="https://cdn.discordapp.com/attachments/807369656021024808/807371275277434890/unknown.png")
+        embed_message.set_footer(text="Foto do local por ren...anônimo", icon_url="https://cdn.discordapp.com/attachments/549252054347153439/807369261004750858/logo_habibs_1.jpg")
+        embed_message.add_field(name="😱", value="ELE DA RÉ NO QUIBE???", inline=True)
+        embed_message.add_field(name= "😱",value="~~sempre deu~~ PARECE QUE SIM", inline=True)
+        await message.channel.send(embed=embed_message)
     else:
         await message.channel.send(f'Você não tem permissão para usar esse comando <@{message.author.id}>, bata no vitor se concorda/discorda disso')
 
@@ -62,7 +62,7 @@ async def sair(ctx, bot):
     except:
         print("Deu não")
 
-async def é(ctx, *arg):
+async def e(ctx, *arg):
     try:
         duration = NULL
         repetition = 1
@@ -71,7 +71,6 @@ async def é(ctx, *arg):
             if result > 0:
                 comando = text
                 duration = result
-
             if text.isnumeric():
                 repetition = int(text)
         try:
@@ -84,16 +83,16 @@ async def é(ctx, *arg):
         print(e)
 
 async def ajuda(ctx):
-    comandos = fire.get_commands()
-    embedV = discord.Embed(title="Comandos do bot", colour=discord.Colour(0x393f2e), url="https://youtu.be/qjnREde32XM")
-    embedV.set_author(name="Jon xi nah", url="https://github.com/CaricaturiJosias/DiscordBotVilcrox", icon_url="https://i.redd.it/a1zcxisgjls71.png")
-    embedV.set_image(url="http://images7.memedroid.com/images/UPLOADED740/612ee967b8afb.jpeg")
-    for k in comandos:
-        embedV.add_field(name=f'{k[0]}', value=f'Duracao: {k[1]} segundos', inline=True)
-    await ctx.channel.send(embed=embedV)
+    embed_message = discord.Embed(title="Comandos do bot", colour=discord.Colour(0x393f2e), url="https://youtu.be/qjnREde32XM")
+    embed_message.set_author(name="Jon xi nah", url="https://github.com/CaricaturiJosias/DiscordBotVilcrox", icon_url="https://i.redd.it/a1zcxisgjls71.png")
+    embed_message.set_image(url="http://images7.memedroid.com/images/UPLOADED740/612ee967b8afb.jpeg")
+    for k in fire.get_commands():
+        embed_message.add_field(name=f'{k[0]}', value=f'Duracao: {k[1]} segundos', inline=True)
+    await ctx.channel.send(embed=embed_message)
 
 async def Novo(ctx, *arg):
     try:
+        print(arg)
         if  len(arg) == 1:
             await ctx.channel.send("🤓?")
             return

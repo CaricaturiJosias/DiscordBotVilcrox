@@ -27,7 +27,7 @@ async def sair(ctx, error):
     await ctx.channel.send('Não foi possível sair')
     print(f"Não foi possível sair do canal {ctx.message.author.voice.channel}")
 
-async def é(ctx, error):
+async def e(ctx, error):
     await ctx.channel.send('Não foi possível iniciar um turbulhão itararé  😛💦')
 
 async def Novo(ctx, error):

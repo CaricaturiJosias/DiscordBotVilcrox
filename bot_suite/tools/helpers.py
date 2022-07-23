@@ -20,8 +20,8 @@ async def saida(vc):
 
 def create_command_json(command_name : str, duration) -> str:
     """
-        Create a 'query' to insert into firebase
-        
+        Creates a 'query' to insert into firebase
+
         Parameters
         ----------
         - command_name -> str
@@ -29,4 +29,4 @@ def create_command_json(command_name : str, duration) -> str:
         - duration -> either int or float (doesn't matter)
             * duration of the command in seconds
     """
-    return(f"""{{\n\t"{command_name}":\n\t{{\n\t\t"duration": {duration}\n\t}}\n}}""")
+    return(f"""{{\n\t"{command_name}":\n\t{{\n\t\t"Duration": {duration}\n\t}}\n}}""")
