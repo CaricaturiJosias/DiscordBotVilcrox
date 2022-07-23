@@ -32,3 +32,6 @@ async def sair(ctx, error):
 
 async def ajuda(ctx, error):
     await ctx.channel.send('Houve algum problema mostrando os comandos')
+
+async def delete(ctx, error):
+    await ctx.channel.send('Houve algum problema mostrando os comandos')

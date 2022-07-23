@@ -1,4 +1,4 @@
-#This is a discord bot made to annoy a friend, please be gentle 
+#This is a discord bot made to annoy a friend, please be gentle
 
 from asyncio import wait_for
 from asyncio.windows_events import NULL
@@ -14,9 +14,10 @@ sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/case/bot_case/disc_callers
 import helpers as help
 import discord_calls as disc
 import error_calls as erro
+import fir_con as fire
 
 dir_path =  os.path.dirname(__file__)
-bot = commands.Bot(command_prefix = "v ", owner_id = 183653926598475776)   
+bot = commands.Bot(command_prefix = "v ", owner_id = 183653926598475776)
 
 def get_bot():
     return bot
@@ -25,7 +26,7 @@ def get_bot():
 async def ready_caller():
     await disc.ready(bot)
 
-@bot.command(name="urbs") 
+@bot.command(name="urbs")
 async def urbs(message):
     await disc.urbs(message)
 @urbs.error
@@ -82,6 +83,15 @@ async def Novo(ctx, nome, duracao):
 async def Novo(ctx, error):
     await erro.Novo(ctx, error)
 
+@bot.command(name="delete")
+@commands.is_owner()
+async def delete(ctx, nome):
+    await disc.delete(ctx, nome)
+@Novo.delete
+async def delete(ctx, error):
+    await erro.delete(ctx, error)
+
 load_dotenv()
 token = os.getenv('token')
+fire.connect_db()
 bot.run(token)

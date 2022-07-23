@@ -1,5 +1,4 @@
 def leitura(texto, tempo):
-    print("Comado: "+texto+"\nDuracao: "+tempo)
     if isfloat(tempo):
         tempo = float(tempo)
         return [texto, tempo]
@@ -51,3 +50,16 @@ async def register(comando, id_user, id_vc, id_canal_texto, id_guild, repeticao)
 async def saida(ctx):
     await ctx.disconnect()
     ctx.cleanup()
+
+def create_command_json(command_name : str, duration) -> str:
+    """
+        Create a 'query' to insert into firebase
+        
+        Parameters
+        ----------
+        - command_name -> str
+            * name of the command to be recorded
+        - duration -> either int or float (doesn't matter)
+            * duration of the command in seconds
+    """
+    return(f"""{{\n\t"{command_name}":\n\t{{\n\t\t"duration": {duration}\n\t}}\n}}""")

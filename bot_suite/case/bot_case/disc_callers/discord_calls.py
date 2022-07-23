@@ -10,6 +10,7 @@ dir_path =  os.path.dirname(__file__)
 sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/tools")
 import helpers as help
 import constants as const
+import fir_con as fire
 
 def ready(bot):
     print(str(bot.user)+' has connected to Discord!')
@@ -59,7 +60,7 @@ async def sair(ctx, bot):
         print("Deu não")
 
 # async def é(ctx, *arg):
-#     duracao = NULL 
+#     duracao = NULL
 #     repeticao = 1
     # for text in arg:
     #     resultado = DB.Comando(text)
@@ -90,13 +91,20 @@ async def ajuda(ctx):
     #     embedV.add_field(name=f'{k[0]}', value=f'Duracao: {k[1]} segundos', inline=True)
     await ctx.channel.send(embed=embedV)
 
-async def Novo(ctx, nome, duracao):
-    print("Arg1 = "+str(nome))
-    print("Arg2 = "+str(duracao))
-    # try: 
-    #     resposta = help.leitura(nome, duracao)
-    #     if resposta != [0,0]:
-    #         DB.Comando_insert(resposta)
-    #         ctx.chanel.send("Inserido com sucesso")
-    # except:
-    #     print("Erro")
+async def Novo(ctx, command, duration):
+    try:
+        if help.leitura(command, duration) != [0,0]:
+            if fire.insert_command(command, duration) == False:
+                await ctx.channel.send("Esse comando já existe\t 🤬💢")
+                return
+            await ctx.channel.send("Inserido com sucesso 👍")
+    except Exception as e:
+        print(e)
+        await ctx.channel.send("Deu não 😨")
+
+async def delete(ctx, command : str):
+    try:
+        fire.delete_command(command)
+    except Exception as e:
+        print(e)
+        await ctx.channel.send("Deu não\t🤡")
