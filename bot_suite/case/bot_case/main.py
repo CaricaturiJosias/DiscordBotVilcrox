@@ -14,7 +14,7 @@ sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/case/bot_case/disc_callers
 import helpers as help
 import discord_calls as disc
 import error_calls as erro
-import fir_con as fire
+import fire_con as fire
 
 dir_path =  os.path.dirname(__file__)
 bot = commands.Bot(command_prefix = "v ", owner_id = 183653926598475776)

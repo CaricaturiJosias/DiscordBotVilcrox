@@ -1,3 +1,9 @@
+import sys
+
+sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/tools")
+import helpers as help
+import constants as const
+
 """
     Made for storing constants
 """
@@ -12,3 +18,6 @@ MensagemProibida = [ "lepo"
                     ,"lepo lepo"
                     , "kid abelha"
                     , "coringatron"]
+
+SECONDS_0_5         : int = 3
+SECONDS_60          : int = 60

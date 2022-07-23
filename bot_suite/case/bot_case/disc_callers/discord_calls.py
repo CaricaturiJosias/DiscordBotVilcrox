@@ -10,7 +10,10 @@ dir_path =  os.path.dirname(__file__)
 sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/tools")
 import helpers as help
 import constants as const
-import fir_con as fire
+import fire_con as fire
+
+sys.path.append("D:/Cthings/prog/Bot-Python/bot_suite/case/bot_case/util")
+import bot_util as bot
 
 def ready(bot):
     print(str(bot.user)+' has connected to Discord!')
@@ -59,28 +62,26 @@ async def sair(ctx, bot):
     except:
         print("Deu não")
 
-# async def é(ctx, *arg):
-#     duracao = NULL
-#     repeticao = 1
-    # for text in arg:
-    #     resultado = DB.Comando(text)
-    #     if resultado != 0:
-    #         comando = text
-    #         duracao = resultado
+async def é(ctx, *arg):
+    try:
+        duration = NULL
+        repetition = 1
+        for text in arg:
+            result = fire.get_command(text)
+            if result > 0:
+                comando = text
+                duration = result
 
-    #     if text.isnumeric():
-    #         repeticao = int(text)
-    # try:
-    #     if duracao != NULL:
-    #         if help.checagem(queue, ctx.author.id, ctx.author.name, comando) == 1 and len(queue) == 1:
-    #             await Play(ctx, comando, duracao, repeticao)
-    #             queue.pop(0)
-    #         elif len(queue) > 1:
-    #             await ctx.channel.send("Colocando na queue")
-    #         else:
-    #             await ctx.channel.send("Não foi possível iniciar este comando\nSinto muito")
-    # except:
-    #             await saida(ctx)
+            if text.isnumeric():
+                repetition = int(text)
+        try:
+            if duration != NULL:
+                await bot.Play(ctx, comando, duration, repetition)
+        except Exception as e:
+                await ctx.channel.send("Deu pra tocar não 🤓")
+                print(e)
+    except Exception as e:
+        print(e)
 
 async def ajuda(ctx):
     # comandos = DB.comando_list()

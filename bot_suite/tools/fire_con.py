@@ -12,7 +12,7 @@ def connect_db():
     {'databaseURL' : 'https://bot-discord-cezario-default-rtdb.firebaseio.com/'})
 
 def check_command(command : str) -> True:
-    ref = db.reference("/Commands/Command")
+    ref = db.reference("/Commands")
     commands = ref.order_by_key().get()
     if command in commands:
         return True
@@ -21,7 +21,7 @@ def check_command(command : str) -> True:
 def insert_command(command : str, duration)-> bool:
     if check_command(command):
         return False
-    ref = db.reference("/Commands/Command")
+    ref = db.reference("/Commands")
     import json
     insert_path = os.path.dirname(__file__) + "insert_command.json"
     f = open(insert_path, "w")
@@ -46,10 +46,20 @@ def delete_command(command : str) ->bool:
         return False
 
     try:
-        ref = db.reference("/Commands/Command")
+        ref = db.reference("/Commands")
         ref.child(command).delete()
         return True
 
     except Exception as e:
         print(e)
         return False
+
+def get_command(command : str):
+    ref = db.reference("/Commands")
+    fire_response = ref.child(command).get()
+    if fire_response == None:
+        return -2
+    duration =fire_response['Duration']
+    if help.isfloat(duration):
+        return duration
+    return -1
